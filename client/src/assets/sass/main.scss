@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500;700&display=swap');
+
+// $primary: #feaa00;
+$primary: #788402;
+$secondary: #788402;
+$light: #fff7e9;
+// $dark: #342628;
+$dark: #581e0d;
+
+body,
+html {
+  font-family: 'Roboto', sans-serif !important;
+  height: 100%;
+  width: 100%;
+}
+
+#root {
+  background: $dark !important;
+  height: 100%;
+  width: 100%;
+}
+
+.App {
+  background: $dark !important;
+}
+
+#main-navbar {
+  h2 {
+    font-weight: 500 !important;
+  }
+
+  .lead {
+    font-size: 1.25rem;
+    font-weight: 400;
+  }
+}
+
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='date'],
+select,
+textarea {
+  background-color: $light !important;
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 1rem;
+  .card {
+    background-color: $light;
+    .card-footer {
+      background-color: inherit;
+      border-top: 0;
+    }
+  }
+}
+
+.recipe-details {
+  .recipe-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    font-size: 0.9rem;
+    p {
+      margin-bottom: 0;
+    }
+    .col {
+      padding-right: 5px;
+      padding-left: 5px;
+    }
+    strong {
+      color: $dark;
+    }
+  }
+  .recipe-secondary {
+    font-size: 0.9rem;
+    strong {
+      color: $dark;
+    }
+  }
+}
+
+.recipe-how-to {
+  .recipe-ingredients {
+    ul {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      padding-inline-start: 5px;
+      padding-right: 15px;
+      list-style-position: outside;
+      font-size: 0.8rem;
+    }
+  }
+  .recipe-instructions {
+    ul {
+      padding-inline-start: 20px;
+      list-style-position: outside;
+      padding-right: 30px;
+      text-align: justify;
+    }
+  }
+}
+
+// Medium Screens
+@media only screen and (max-width: 992px) {
+  .recipe-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// Small Screens
+@media only screen and (max-width: 768px) {
+  .recipe-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+// X-Small Screens
+@media only screen and (max-width: 576px) {
+  .recipe-grid {
+    grid-template-columns: repeat(2, 1fr);
+    .card-body {
+      padding: 0.75rem;
+    }
+  }
+}
+
+@import '~bootstrap/scss/bootstrap';
