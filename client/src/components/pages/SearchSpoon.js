@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import Search from '../spoon-recipes/Search.js';
 import SpoonRecipes from '../spoon-recipes/SpoonRecipes.js';
 
-const Home = props => {
+const SearchSpoon = props => {
   return (
     <Fragment>
       <Search />
@@ -11,4 +11,4 @@ const Home = props => {
   );
 };
 
-export default Home;
+export default SearchSpoon;

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import {
-  useContact,
-  addContact,
+  useRecipes,
+  addRecipe,
   clearCurrent,
-  updateContact,
-} from '../../context/contact/ContactState';
+  updateRecipe,
+} from '../../context/my-recipes/RecipesState';
 
-const ContactForm = () => {
-  const [contactState, contactDispatch] = useContact();
+const RecipeForm = () => {
+  const [recipesState, recipesDispatch] = useRecipes();
 
-  const { current } = contactState;
+  const { current } = recipesState;
 
-  const [contact, setContact] = useState({
+  const [recipe, setRecipe] = useState({
     name: '',
     email: '',
     phone: '',
@@ -20,9 +20,9 @@ const ContactForm = () => {
 
   useEffect(() => {
     if (current !== null) {
-      setContact(current);
+      setRecipe(current);
     } else {
-      setContact({
+      setRecipe({
         name: '',
         email: '',
         phone: '',
@@ -31,32 +31,32 @@ const ContactForm = () => {
     }
   }, [current]);
 
-  const { name, email, phone, type } = contact;
+  const { name, email, phone, type } = recipe;
 
   const onChange = e =>
-    setContact({
-      ...contact,
+    setRecipe({
+      ...Recipe,
       [e.target.name]: e.target.value,
     });
 
   const onSubmit = e => {
     e.preventDefault();
     if (current === null) {
-      addContact(contactDispatch, contact);
+      addRecipe(recipesDispatch, recipe);
     } else {
-      updateContact(contactDispatch, contact);
+      updateRecipe(recipesDispatch, recipe);
     }
     clearAll();
   };
 
   const clearAll = () => {
-    clearCurrent(contactDispatch);
+    clearCurrent(recipesDispatch);
   };
 
   return (
     <form onSubmit={onSubmit}>
       <h2 className='text-primary'>
-        {current === null ? 'Add Contact' : 'Edit Contact'}
+        {current === null ? 'Add Recipe' : 'Edit Recipe'}
       </h2>
       <input
         type='text'
@@ -79,7 +79,7 @@ const ContactForm = () => {
         value={phone}
         onChange={onChange}
       />
-      <h5>Contact Type</h5>
+      <h5>Recipe Type</h5>
       <input
         type='radio'
         name='type'
@@ -99,7 +99,7 @@ const ContactForm = () => {
       <div>
         <input
           type='submit'
-          value={current === null ? 'Add Contact' : 'Update Contact'}
+          value={current === null ? 'Add Recipe' : 'Update Recipe'}
           className='btn btn-primary btn-block'
         />
       </div>
@@ -114,4 +114,4 @@ const ContactForm = () => {
   );
 };
 
-export default ContactForm;
+export default RecipeForm;

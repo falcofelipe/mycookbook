@@ -6,7 +6,15 @@ import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Container from 'react-bootstrap/Container';
 
+import { useAuth, logoutUser } from '../../context/auth/AuthState';
+
 const MainNavbar = ({ icon, title }) => {
+  const [authState, authDispatch] = useAuth();
+
+  const { isAuthenticated, user } = authState;
+
+  const firstName = user ? user.name.split(' ')[0] : null;
+
   const nonUserLinks = (
     <NavDropdown title='Account' className='text-dark nav-acc-dropdown'>
       <Nav.Item>
@@ -24,24 +32,21 @@ const MainNavbar = ({ icon, title }) => {
     </NavDropdown>
   );
 
-  // const userLinks = (
-  //   <NavDropdown
-  //     title={`Hello ${user ? user.name : null}`}
-  //     className='nav-acc-dropdown'>
-  //     <Nav.Item>
-  //       <Nav.Link href='/admin' className='nav-acc-link'>
-  //         <i className='fas fa-cog' /> <span className='hide-sm'>Admin</span>
-  //       </Nav.Link>
-  //       <Nav.Link
-  //         href='#!'
-  //         onClick={() => logoutUser(authDispatch)}
-  //         className='nav-acc-link'>
-  //         <i className='fas fa-sign-out-alt' />{' '}
-  //         <span className='hide-sm'>Logout</span>
-  //       </Nav.Link>
-  //     </Nav.Item>
-  //   </NavDropdown>
-  // );
+  const userLinks = (
+    <NavDropdown
+      title={`Hello ${user ? firstName : null}`}
+      className='nav-acc-dropdown'>
+      <Nav.Item>
+        <Nav.Link
+          href='#!'
+          onClick={() => logoutUser(authDispatch)}
+          className='nav-acc-link'>
+          <i className='fas fa-sign-out-alt' />{' '}
+          <span className='hide-sm'>Logout</span>
+        </Nav.Link>
+      </Nav.Item>
+    </NavDropdown>
+  );
 
   return (
     <Navbar
@@ -59,16 +64,16 @@ const MainNavbar = ({ icon, title }) => {
         <Navbar.Toggle aria-controls='main-navbar-nav' />
         <Navbar.Collapse id='main-navbar-nav'>
           <Nav className='ml-auto lead'>
-            <Nav.Link as={Link} to='/' className='text-dark'>
-              Home
+            <Nav.Link as={Link} to='/search' className='text-dark'>
+              Search
             </Nav.Link>
             <Nav.Link as={Link} to='/' className='text-dark'>
-              Search
+              My Recipes
             </Nav.Link>
             <Nav.Link as={Link} to='/about' className='text-dark'>
               About Us
             </Nav.Link>
-            {nonUserLinks}
+            {isAuthenticated ? userLinks : nonUserLinks}
           </Nav>
         </Navbar.Collapse>
       </Container>

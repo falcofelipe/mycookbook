@@ -6,6 +6,9 @@ import {
 } from '../../context/alert/AlertState';
 import { useAuth, loginUser, clearErrors } from '../../context/auth/AuthState';
 
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+
 const Login = props => {
   const alertDispatch = useAlert()[1];
   const [authState, authDispatch] = useAuth();
@@ -47,30 +50,36 @@ const Login = props => {
   };
 
   return (
-    <div className='form-container'>
-      <h1>
+    <div className='form-container bg-light'>
+      <h1 className='mb-3'>
         Account <span className='text-primary'>Login</span>
       </h1>
-      <form onSubmit={onSubmit}>
-        <div className='form-group'>
-          <label htmlFor='email'>Email</label>
-          <input type='email' name='email' value={email} onChange={onChange} />
-        </div>
-        <div className='form-group'>
-          <label htmlFor='password'>Password</label>
-          <input
+      <Form onSubmit={onSubmit}>
+        <Form.Group>
+          <Form.Label>Email address:</Form.Label>
+          <Form.Control
+            type='email'
+            name='email'
+            value={email}
+            onChange={onChange}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Password:</Form.Label>
+          <Form.Control
             type='password'
             name='password'
             value={password}
             onChange={onChange}
           />
-        </div>
-        <input
+        </Form.Group>
+        <Button
+          variant='primary'
           type='submit'
-          value='Login'
-          className='btn btn-primary btn-block'
-        />
-      </form>
+          className='w-50 mx-auto btn-block'>
+          Submit
+        </Button>
+      </Form>
     </div>
   );
 };

@@ -191,7 +191,7 @@ const SpoonRecipe = ({
                 className='d-flex flex-column justify-content-middle'>
                 <div className='recipe-secondary text-center mx-2'>
                   <div className='dish-types'>
-                    <strong>Dish Types:</strong>
+                    <strong>Dish Types: </strong>
                     {dishTypes.length > 0
                       ? dishTypes.join(', ')
                       : 'Not Specified'}
@@ -201,7 +201,7 @@ const SpoonRecipe = ({
                     {cuisines.length > 0 ? cuisines.join(', ') : 'Generic'}
                   </div>
                   <div className='diets'>
-                    <strong>Diets:</strong>{' '}
+                    <strong>Diets: </strong>
                     {diets.length > 0 ? diets.join(', ') : 'None'}
                   </div>
                 </div>

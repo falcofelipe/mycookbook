@@ -23,7 +23,7 @@ const SpoonRecipesItem = ({ recipe, location }) => {
         <Link
           as={Button}
           to={{
-            pathname: `/spoonacular/recipes/${id}`,
+            pathname: `/search/recipes/${id}`,
             state: {
               recipe,
               fromLink: location.pathname,
@@ -32,12 +32,6 @@ const SpoonRecipesItem = ({ recipe, location }) => {
           className='btn btn-primary btn-sm my-1 btn-block w-75 mx-auto'>
           Details
         </Link>
-        {/* <Button
-          variant='primary'
-          className='btn-sm my-1 btn-block w-75 mx-auto'
-          onClick={() => console.log(recipe)}>
-          Details
-        </Button> */}
       </Card.Footer>
     </Card>
   );

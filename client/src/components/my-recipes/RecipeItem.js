@@ -1,20 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  useContact,
-  deleteContact,
+  useRecipes,
+  deleteRecipe,
   setCurrent,
   clearCurrent,
-} from '../../context/contact/ContactState';
+} from '../../context/my-recipes/RecipesState';
 
-const ContactItem = ({ contact }) => {
-  const contactDispatch = useContact()[1];
+const RecipeItem = ({ recipe }) => {
+  const recipesDispatch = useRecipes()[1];
 
-  const { _id, name, email, phone, type } = contact;
+  const { _id, name, email, phone, type } = recipe;
 
   const onDelete = e => {
-    deleteContact(contactDispatch, _id);
-    clearCurrent(contactDispatch);
+    deleteRecipe(recipesDispatch, _id);
+    clearCurrent(recipesDispatch);
   };
 
   return (
@@ -46,7 +46,7 @@ const ContactItem = ({ contact }) => {
       <p>
         <button
           className='btn btn-dark btn-sm'
-          onClick={() => setCurrent(contactDispatch, contact)}>
+          onClick={() => setCurrent(recipesDispatch, recipe)}>
           Edit
         </button>
         <button className='btn btn-danger btn-sm' onClick={onDelete}>
@@ -57,8 +57,8 @@ const ContactItem = ({ contact }) => {
   );
 };
 
-ContactItem.propTypes = {
-  contact: PropTypes.object.isRequired,
+RecipeItem.propTypes = {
+  recipe: PropTypes.object.isRequired,
 };
 
-export default ContactItem;
+export default RecipeItem;

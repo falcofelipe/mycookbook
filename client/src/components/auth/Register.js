@@ -10,6 +10,9 @@ import {
   clearErrors,
 } from '../../context/auth/AuthState';
 
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+
 const Register = props => {
   const alertDispatch = useAlert()[1];
   const [authState, authDispatch] = useAuth();
@@ -52,45 +55,54 @@ const Register = props => {
   };
 
   return (
-    <div className='form-container'>
-      <h1>
+    <div className='form-container bg-light'>
+      <h1 className='mb-3'>
         Account <span className='text-primary'>Register</span>
       </h1>
-      <form onSubmit={onSubmit}>
-        <div className='form-group'>
-          <label htmlFor='name'>Name</label>
-          <input type='text' name='name' value={name} onChange={onChange} />
-        </div>
-        <div className='form-group'>
-          <label htmlFor='email'>Email</label>
-          <input type='email' name='email' value={email} onChange={onChange} />
-        </div>
-        <div className='form-group'>
-          <label htmlFor='password'>Password</label>
-          <input
+      <Form onSubmit={onSubmit}>
+        <Form.Group>
+          <Form.Label>Name:</Form.Label>
+          <Form.Control
+            type='text'
+            name='name'
+            value={name}
+            onChange={onChange}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Email address:</Form.Label>
+          <Form.Control
+            type='email'
+            name='email'
+            value={email}
+            onChange={onChange}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Password:</Form.Label>
+          <Form.Control
             type='password'
             name='password'
             value={password}
             onChange={onChange}
-            minLength='6'
           />
-        </div>
-        <div className='form-group'>
-          <label htmlFor='passwordConf'>Confirm your password</label>
-          <input
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Confirm your Password:</Form.Label>
+          <Form.Control
             type='password'
             name='passwordConf'
             value={passwordConf}
             onChange={onChange}
-            minLength='6'
           />
-        </div>
-        <input
+        </Form.Group>
+        <Button
+          variant='primary'
           type='submit'
-          value='Register'
-          className='btn btn-primary btn-block'
-        />
-      </form>
+          className='w-50 mx-auto btn-block'>
+          Submit
+        </Button>
+      </Form>
     </div>
   );
 };
