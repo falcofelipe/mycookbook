@@ -1,6 +1,6 @@
 import React from 'react';
 import SpoonRecipesItem from './SpoonRecipesItem.js';
-import Spinner from '../layout/Spinner';
+import Spinner from '../layout/MySpinner';
 import { useSpoon } from '../../context/spoon/SpoonState';
 
 const SpoonRecipes = props => {

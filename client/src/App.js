@@ -17,6 +17,7 @@ import About from './components/pages/About.js';
 import NotFound from './components/pages/NotFound.js';
 
 import SpoonState from './context/spoon/SpoonState';
+import RecipesState from './context/my-recipes/RecipesState';
 import AlertState from './context/alert/AlertState';
 import AuthState from './context/auth/AuthState';
 
@@ -26,31 +27,33 @@ import Container from 'react-bootstrap/Container';
 const App = () => {
   return (
     <AuthState>
-      <SpoonState>
-        <AlertState>
-          <Router>
-            <div className='App'>
-              <Navbar title='My Cookbook' icon='fas fa-utensils' />
-              <Container>
-                <Alert />
-                <Switch>
-                  <PrivateRoute exact path='/' component={MyRecipesRoot} />
-                  <Route exact path='/search' component={SearchSpoon} />
-                  <Route exact path='/about' component={About} />
-                  <Route
-                    exact
-                    path='/search/recipes/:id'
-                    component={SpoonRecipe}
-                  />
-                  <Route exact path='/login' component={Login} />
-                  <Route exact path='/register' component={Register} />
-                  <Route component={NotFound} />
-                </Switch>
-              </Container>
-            </div>
-          </Router>
-        </AlertState>
-      </SpoonState>
+      <RecipesState>
+        <SpoonState>
+          <AlertState>
+            <Router>
+              <div className='App'>
+                <Navbar title='My Cookbook' icon='fas fa-utensils' />
+                <Container>
+                  <Alert />
+                  <Switch>
+                    <PrivateRoute exact path='/' component={MyRecipesRoot} />
+                    <Route exact path='/search' component={SearchSpoon} />
+                    <Route exact path='/about' component={About} />
+                    <Route
+                      exact
+                      path='/search/recipes/:id'
+                      component={SpoonRecipe}
+                    />
+                    <Route exact path='/login' component={Login} />
+                    <Route exact path='/register' component={Register} />
+                    <Route component={NotFound} />
+                  </Switch>
+                </Container>
+              </div>
+            </Router>
+          </AlertState>
+        </SpoonState>
+      </RecipesState>
     </AuthState>
   );
 };

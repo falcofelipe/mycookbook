@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRecipes, getRecipes } from '../../context/my-recipes/RecipesState';
 import RecipeItem from './RecipeItem';
-import Spinner from '../layout/Spinner';
+import Spinner from '../layout/MySpinner';
 import filterRecipes from '../../selectors/filterRecipes';
 
 const MyRecipes = () => {
