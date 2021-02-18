@@ -174,8 +174,8 @@ const RecipeForm = () => {
       <h2 className='text-primary text-center'>
         {current === null ? 'Add Recipe' : 'Edit Recipe'}
       </h2>
-      <Card className='bg-light px-4 pt-2 mt-4'>
-        <Form onSubmit={onSubmit}>
+      <Card className='bg-light px-3 mt-4'>
+        <Form id='recipe-form' onSubmit={onSubmit}>
           <Row>
             <Col
               id='recipe-form-details'
@@ -234,7 +234,7 @@ const RecipeForm = () => {
                     </div>
                   </div>
                   <hr className='border-light w-75' />
-                  <div className='text-center mb-3'>
+                  <div className='recipe-stats-form text-center mb-3'>
                     <div className='servings'>
                       <strong className='d-inline'>Servings: </strong>
                       <span>
@@ -305,7 +305,7 @@ const RecipeForm = () => {
                   sm={5}
                   md={12}
                   className='d-flex flex-column justify-content-middle'>
-                  <div className='recipe-secondary text-center mx-2'>
+                  <div className='recipe-secondary-form text-center mx-2'>
                     <div className='dish-types'>
                       <strong>Dish Types: </strong>
                       <span>
@@ -382,36 +382,35 @@ const RecipeForm = () => {
                     ? ingredients.map((ingredient, idx) => (
                         <li key={idx}>
                           <span>{ingredient}</span>
-                          <span>
-                            <a
-                              href='#!'
-                              onClick={toggleEdit}
-                              className='edit-icon ml-5'>
-                              <i className='fas fa-pencil-alt text-dark' />
-                            </a>
+                          <span className='action-icons'>
                             <a
                               href='#!'
                               name={idx}
                               onClick={onDeleteIngredient}
                               className='edit-icon pull-right'>
-                              <i className='fas fa-times text-danger' />
+                              <i className='fas fa-times text-dark' />
                             </a>{' '}
                           </span>
                         </li>
                       ))
                     : null}
                   <li>
-                    <Form.Group>
-                      <Form.Control
-                        type='text'
-                        placeholder='Ingredient'
-                        name='ingredientItem'
-                        value={ingredientItem}
-                        onChange={onChange}
-                      />
-                      <Button onClick={onAddIngredient}>
-                        <i className='fas fa-plus' /> Add
-                      </Button>
+                    <Form.Group as={Row}>
+                      <Col xs={10} sm={9} className='pr-0'>
+                        <Form.Control
+                          type='text'
+                          placeholder='Ingredient'
+                          name='ingredientItem'
+                          value={ingredientItem}
+                          onChange={onChange}
+                        />
+                      </Col>
+                      <Col xs={2} sm={3} className='p-0'>
+                        <Button onClick={onAddIngredient}>
+                          <i className='fas fa-plus' />
+                          <span className='d-none d-sm-inline ml-1'>Add</span>
+                        </Button>
+                      </Col>
                     </Form.Group>
                   </li>
                 </ul>
@@ -423,49 +422,42 @@ const RecipeForm = () => {
                     ? instructions.map((instruction, idx) => (
                         <li key={idx}>
                           <span>{instruction}</span>
-                          <span>
-                            <a
-                              href='#!'
-                              onClick={toggleEdit}
-                              className='edit-icon ml-5'>
-                              <i className='fas fa-pencil-alt text-dark' />
-                            </a>
+                          <span className='action-icons'>
                             <a
                               href='#!'
                               name={idx}
                               onClick={onDeleteInstruction}
-                              className='edit-icon pull-right'>
-                              <i className='fas fa-times text-danger' />
+                              className='edit-icon'>
+                              <i className='fas fa-times text-dark' />
                             </a>{' '}
                           </span>
                         </li>
                       ))
                     : null}
                   <li>
-                    <Form.Group>
-                      <Form.Control
-                        type='text'
-                        placeholder='Instruction'
-                        name='instructionStep'
-                        value={instructionStep}
-                        onChange={onChange}
-                      />
-                      <Button onClick={onAddInstruction}>
-                        <i className='fas fa-plus' /> Add
-                      </Button>
+                    <Form.Group as={Row}>
+                      <Col xs={10} sm={9} className='pr-0'>
+                        <Form.Control
+                          as='textarea'
+                          rows={2}
+                          placeholder='Instruction'
+                          name='instructionStep'
+                          value={instructionStep}
+                          onChange={onChange}
+                        />
+                      </Col>
+                      <Col xs={2} sm={3} className='p-0'>
+                        <Button onClick={onAddInstruction}>
+                          <i className='fas fa-plus' />
+                          <span className='d-none d-sm-inline ml-1'>Add</span>
+                        </Button>
+                      </Col>
                     </Form.Group>
                   </li>
                 </ol>
               </div>
             </Col>
           </Row>
-          <div>
-            <Form.Control
-              type='submit'
-              value={current === null ? 'Add Recipe' : 'Update Recipe'}
-              className='btn btn-primary btn-block'
-            />
-          </div>
           {current ? (
             <div>
               <button className='btn btn-light btn-block' onClick={clearAll}>
@@ -475,6 +467,14 @@ const RecipeForm = () => {
           ) : null}
         </Form>
       </Card>
+      <Button
+        type='submit'
+        form='recipe-form'
+        var='primary'
+        onClick={onSubmit}
+        className='btn-block w-75 mx-auto my-2'>
+        {current === null ? 'Add Recipe' : 'Update Recipe'}
+      </Button>
     </Fragment>
   );
 };
