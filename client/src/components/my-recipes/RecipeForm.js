@@ -1,11 +1,13 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, useMemo, Fragment } from 'react';
 import {
   useRecipes,
   addRecipe,
   clearCurrent,
   updateRecipe,
 } from '../../context/my-recipes/RecipesState';
-import axios from 'axios';
+import { useAlert, setAlert } from '../../context/alert/AlertState';
+import { uploadImage } from '../../utils/uploadImage';
+import { validateRecipeForm } from '../../utils/validateRecipeForm';
 
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
@@ -13,59 +15,63 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-const RecipeForm = () => {
+const RecipeForm = props => {
   const [recipesState, recipesDispatch] = useRecipes();
+  const alertDispatch = useAlert()[1];
 
   const { current } = recipesState;
 
   const defaultImgUrl =
     'https://res.cloudinary.com/falco-felipe27/image/upload/v1613529260/hnyonilaojqx1zjisski.jpg';
 
-  const [uploading, setUploading] = useState(false);
-  const [recipe, setRecipe] = useState({
-    title: '',
-    imageUrl: defaultImgUrl,
-    icons: [],
-    servings: 0,
-    readyInMinutes: 0,
-    healthScore: 0,
-    dishTypes: '',
-    cuisines: '',
-    diets: '',
-    ingredients: [],
-    instructions: [],
-    fromSpoon: false,
-    spoonId: null,
-  });
+  // useMemo is used to prevent rerendering initialState on every render
+  const initialState = useMemo(
+    () => ({
+      title: '',
+      imageUrl: defaultImgUrl,
+      icons: [],
+      servings: 0,
+      readyInMinutes: 0,
+      healthScore: 0,
+      dishTypes: '',
+      cuisines: '',
+      diets: '',
+      ingredients: [],
+      ingredientItem: '',
+      instructions: [],
+      instructionStep: '',
+      fromSpoon: false,
+      spoonId: null,
+    }),
+    []
+  );
+
+  const setUploading = useState(false)[1];
+  const [recipe, setRecipe] = useState(initialState);
 
   useEffect(() => {
     if (current !== null) {
-      setRecipe(current);
-    } else {
       setRecipe({
-        title: '',
-        imageUrl: defaultImgUrl,
-        icons: [],
-        servings: 0,
-        readyInMinutes: 0,
-        healthScore: 0,
-        dishTypes: '',
-        cuisines: '',
-        diets: '',
-        ingredients: [],
-        instructions: [],
-        fromSpoon: false,
-        spoonId: null,
+        ...current,
+        dishTypes: current.dishTypes.join(', '),
+        cuisines: current.cuisines.join(', '),
+        diets: current.diets.join(', '),
       });
+    } else if (props.state && props.state.spoonRecipe) {
+      setRecipe({
+        ...props.state.spoonRecipe,
+        dishTypes: props.state.spoonRecipe.dishTypes.join(', '),
+        cuisines: props.state.spoonRecipe.cuisines.join(', '),
+        diets: props.state.spoonRecipe.diets.join(', '),
+      });
+    } else {
+      setRecipe(initialState);
     }
-  }, [current]);
-
-  useEffect(() => {});
+  }, [current, props.state, initialState]);
 
   const {
     title,
     imageUrl,
-    icons,
     servings,
     readyInMinutes,
     healthScore,
@@ -76,8 +82,6 @@ const RecipeForm = () => {
     ingredientItem,
     instructions,
     instructionStep,
-    fromSpoon,
-    spoonId,
   } = recipe;
 
   const onChange = e => {
@@ -88,9 +92,13 @@ const RecipeForm = () => {
   };
 
   const toggleEdit = e => {
-    e.target.parentElement.parentElement.nextElementSibling.classList.toggle(
-      'd-none'
-    );
+    if (e.target.tagName === 'I') {
+      e.target.parentElement.parentElement.nextElementSibling.classList.toggle(
+        'd-none'
+      );
+    } else {
+      e.target.parentElement.nextElementSibling.classList.toggle('d-none');
+    }
     e.target.parentElement.parentElement.classList.toggle('d-none');
   };
 
@@ -104,12 +112,6 @@ const RecipeForm = () => {
     e.target.classList.toggle('d-none');
   };
 
-  const uploadImage = async formData => {
-    const uploadedImage = await axios.post('/api/upload', formData);
-    setUploading(false);
-    return uploadedImage.data;
-  };
-
   const onFileUpload = e => {
     const files = Array.from(e.target.files);
     setUploading(true);
@@ -118,6 +120,7 @@ const RecipeForm = () => {
     files.forEach((file, i) => formData.append(i, file));
 
     uploadImage(formData).then(img => {
+      setUploading(false);
       setRecipe({
         ...recipe,
         imageUrl: img.url,
@@ -150,20 +153,39 @@ const RecipeForm = () => {
     instructions.splice(parseInt(e.target.parentElement.name), 1);
   };
 
-  const prepareRecipeToSend = recipe => {};
+  const prepareRecipeToSend = recipeRaw => {
+    recipeRaw.dishTypes = dishTypes !== '' ? dishTypes.split(',') : [];
+    recipeRaw.cuisines = cuisines !== '' ? cuisines.split(',') : [];
+    recipeRaw.diets = diets !== '' ? diets.split(',') : [];
+    delete recipeRaw.ingredientItem;
+    delete recipeRaw.instructionItem;
+    return recipeRaw;
+  };
 
   const onSubmit = e => {
     e.preventDefault();
 
-    console.log('Form sent');
-    // const recipePrepared = prepareRecipeToSend(recipe);
-    // if (current === null) {
-    //   addRecipe(recipesDispatch, recipe);
-    // } else {
-    //   updateRecipe(recipesDispatch, recipe);
-    // }
-    // clearAll();
+    const recipePrepared = prepareRecipeToSend({ ...recipe });
+    if (!validateRecipeForm(recipe)) {
+      setAlert(
+        alertDispatch,
+        'Some or all of the following required fields are not filled: Title, Servings, Ready In Ingredients',
+        'danger'
+      );
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+      return null;
+    }
+    if (current === null) {
+      addRecipe(recipesDispatch, recipePrepared);
+    } else {
+      updateRecipe(recipesDispatch, recipePrepared);
+    }
+    clearAll();
+    props.history.push('/recipes');
   };
+
+  const preventEnterSubmit = e => e.key === 'Enter' && e.preventDefault();
 
   const clearAll = () => {
     clearCurrent(recipesDispatch);
@@ -171,11 +193,14 @@ const RecipeForm = () => {
 
   return (
     <Fragment>
-      <h2 className='text-primary text-center'>
+      <h1 className='text-light text-center mt-4'>
         {current === null ? 'Add Recipe' : 'Edit Recipe'}
-      </h2>
-      <Card className='bg-light px-3 mt-4'>
-        <Form id='recipe-form' onSubmit={onSubmit}>
+      </h1>
+      <Card className='bg-light px-3 mt-2'>
+        <Form
+          id='recipe-form'
+          onSubmit={onSubmit}
+          onKeyPress={preventEnterSubmit}>
           <Row>
             <Col
               id='recipe-form-details'
@@ -187,7 +212,7 @@ const RecipeForm = () => {
                 <Col className='recipe-img'>
                   <img
                     src={imageUrl}
-                    alt={`Photo of the recipe ${title}`}
+                    alt={`${title}`}
                     style={{ maxWidth: '100%' }}
                   />
                   <Form.Group>
@@ -230,6 +255,7 @@ const RecipeForm = () => {
                         onChange={onChange}
                         onBlur={toggleShow}
                         className='discrete-input d-none'
+                        required
                       />
                     </div>
                   </div>
@@ -254,6 +280,7 @@ const RecipeForm = () => {
                         onChange={onChange}
                         onBlur={toggleShow}
                         className='discrete-input d-none'
+                        required
                       />
                     </div>
                     <div className='ready-in'>
@@ -275,6 +302,7 @@ const RecipeForm = () => {
                         onChange={onChange}
                         onBlur={toggleShow}
                         className='discrete-input d-none'
+                        required
                       />
                     </div>
                     <div className='healthScore'>
@@ -458,13 +486,6 @@ const RecipeForm = () => {
               </div>
             </Col>
           </Row>
-          {current ? (
-            <div>
-              <button className='btn btn-light btn-block' onClick={clearAll}>
-                Clear
-              </button>
-            </div>
-          ) : null}
         </Form>
       </Card>
       <Button
@@ -472,9 +493,10 @@ const RecipeForm = () => {
         form='recipe-form'
         var='primary'
         onClick={onSubmit}
-        className='btn-block w-75 mx-auto my-2'>
+        className='btn-block w-75 mx-auto my-2 font-lg'>
         {current === null ? 'Add Recipe' : 'Update Recipe'}
       </Button>
+      <br />
     </Fragment>
   );
 };

@@ -6,6 +6,8 @@ import Navbar from './components/layout/Navbar.js';
 import Alert from './components/layout/Alert.js';
 
 import MyRecipesRoot from './components/pages/MyRecipesRoot';
+import RecipeForm from './components/my-recipes/RecipeForm';
+import RecipePage from './components/my-recipes/RecipePage';
 
 import SearchSpoon from './components/pages/SearchSpoon.js';
 import SpoonRecipe from './components/spoon-recipes/SpoonRecipe.js';
@@ -36,14 +38,24 @@ const App = () => {
                 <Container>
                   <Alert />
                   <Switch>
-                    <PrivateRoute exact path='/' component={MyRecipesRoot} />
-                    <Route exact path='/search' component={SearchSpoon} />
-                    <Route exact path='/about' component={About} />
-                    <Route
+                    <PrivateRoute
                       exact
-                      path='/search/recipes/:id'
-                      component={SpoonRecipe}
+                      path='/recipes'
+                      component={MyRecipesRoot}
                     />
+                    <PrivateRoute
+                      exact
+                      path='/recipes/form'
+                      component={RecipeForm}
+                    />
+                    <PrivateRoute
+                      exact
+                      path='/recipes/:id'
+                      component={RecipePage}
+                    />
+                    <Route exact path='/' component={SearchSpoon} />
+                    <Route exact path='/about' component={About} />
+                    <Route exact path='/search/:id' component={SpoonRecipe} />
                     <Route exact path='/login' component={Login} />
                     <Route exact path='/register' component={Register} />
                     <Route component={NotFound} />

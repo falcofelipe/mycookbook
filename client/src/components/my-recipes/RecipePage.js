@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { useRecipes, addRecipe } from '../../context/my-recipes/RecipesState';
-import { useAuth } from '../../context/auth/AuthState';
-import { useAlert, setAlert } from '../../context/alert/AlertState';
-import { prepareSpoonRecipe } from '../../utils/prepareSpoonRecipe';
-import { capitalCaseArray } from '../../utils/capitalCaseArray';
+
+import {
+  useRecipes,
+  setCurrent,
+  deleteRecipe,
+} from '../../context/my-recipes/RecipesState';
 
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
@@ -15,110 +16,35 @@ const SpoonRecipe = ({
   location: {
     state: { recipe, fromLink },
   },
+  history,
 }) => {
-  const authState = useAuth()[0];
   const recipesDispatch = useRecipes()[1];
-  const alertDispatch = useAlert()[1];
 
   const {
-    analyzedInstructions,
-    cheap,
+    instructions,
     cuisines,
-    dairyFree,
     diets,
     dishTypes,
-    extendedIngredients,
-    glutenFree,
+    ingredients,
     healthScore,
-    id,
-    image,
+    _id,
+    imageUrl,
     readyInMinutes,
     servings,
     title,
-    vegan,
-    vegetarian,
-    veryHealthy,
   } = recipe;
 
-  const showRecipeIcons = () => {
-    const icons = getIcons();
+  const onEditRecipe = () => {
+    setCurrent(recipesDispatch, recipe);
+  };
 
-    return (
-      <div className='recipe-icons'>
-        {Object.keys(icons).map((keyName, index) => (
-          <div className='tooltip-container ml-1' key={index}>
-            {icons[keyName].icon}
-            <span className='tooltip-text'>{icons[keyName].title}</span>
-          </div>
-        ))}
-      </div>
+  const onDeleteRecipe = () => {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this recipe?'
     );
-  };
-
-  const getIcons = () => {
-    let iconsObject = {};
-
-    if (cheap) {
-      iconsObject.cheap = {
-        icon: <i className='fas fa-dollar-sign recipe-icon' />,
-        title: 'Cheap',
-      };
-    }
-    if (dairyFree) {
-      iconsObject.dairyFree = {
-        icon: (
-          <span className='fa-stack'>
-            <i className='fas fa-ban fa-stack-2x recipe-icon' />
-            <i className='fas fa-cheese fa-stack-1x recipe-icon' />
-          </span>
-        ),
-        title: 'Dairy Free',
-      };
-    }
-    if (glutenFree) {
-      iconsObject.glutenFree = {
-        icon: (
-          <span className='fa-stack'>
-            <i className='fas fa-ban fa-stack-2x recipe-icon' />
-            <i className='fas fa-bread-slice fa-stack-1x  recipe-icon' />
-          </span>
-        ),
-        title: 'Gluten Free',
-      };
-    }
-    if (vegan) {
-      iconsObject.vegan = {
-        icon: <i className='fas fa-seedling recipe-icon' />,
-        title: 'Vegan',
-      };
-    }
-    if (vegetarian) {
-      iconsObject.vegetarian = {
-        icon: <i className='fas fa-leaf recipe-icon' />,
-        title: 'Vegetarian',
-      };
-    }
-    if (veryHealthy) {
-      iconsObject.veryHealthy = {
-        icon: <i className='fas fa-heart recipe-icon' />,
-        title: 'Very Healthy',
-      };
-    }
-
-    return iconsObject;
-  };
-
-  const onSaveRecipe = () => {
-    if (authState.isAuthenticated === true) {
-      setAlert(
-        alertDispatch,
-        'The recipe has been saved to your personal recipes!',
-        'success'
-      );
-      const preparedRecipe = prepareSpoonRecipe(recipe);
-      addRecipe(recipesDispatch, preparedRecipe);
-    } else {
-      setAlert(alertDispatch, 'Please log in to save recipes', 'danger');
+    if (confirmed) {
+      deleteRecipe(recipesDispatch, _id);
+      history.push(fromLink);
     }
   };
 
@@ -130,15 +56,24 @@ const SpoonRecipe = ({
             <i className='fas fa-arrow-left pr-1' /> Return
           </Button>
         </Col>
-        <Col className='text-right mr-0'>
+        <Col className='text-right mr-0 btn-col'>
           <Button
-            onClick={onSaveRecipe}
-            className='btn btn-primary save-recipe-btn'>
-            <i className='fas fa-plus pr-1' /> Save Recipe
+            as={Link}
+            to={'/recipes/form'}
+            onClick={onEditRecipe}
+            className='btn btn-primary recipe-btn d-inline-block'>
+            <i className='fas fa-pencil-alt pr-1' /> Edit{' '}
+            <span className='d-none d-sm-inline'>Recipe</span>
+          </Button>
+          <Button
+            onClick={onDeleteRecipe}
+            className='btn btn-danger recipe-btn d-inline-block'>
+            <i className='fas fa-times pr-1' /> Delete{' '}
+            <span className='d-none d-sm-inline'>Recipe</span>
           </Button>
         </Col>
       </Row>
-      <Card bg='light' className='px-3 pt-0 mt-1' id={`spoon-recipe-${id}`}>
+      <Card bg='light' className='px-3 pt-0 mt-1' id={`spoon-recipe-${_id}`}>
         <Row>
           <Col
             id='recipe-details'
@@ -149,7 +84,7 @@ const SpoonRecipe = ({
             <Row>
               <Col className='recipe-img'>
                 <img
-                  src={image}
+                  src={imageUrl}
                   alt={`${title}`}
                   style={{ maxWidth: '100%' }}
                 />
@@ -159,7 +94,6 @@ const SpoonRecipe = ({
               <Col xs={12} sm={7} md={12}>
                 <div className='recipe-main mb-2'>
                   <h3 className='mt-1 text-light'>{title}</h3>
-                  {showRecipeIcons()}
                 </div>
                 <hr className='border-light w-75' />
                 <div className='recipe-stats mb-3'>
@@ -205,21 +139,17 @@ const SpoonRecipe = ({
                 <div className='recipe-secondary text-center mx-2'>
                   <div className='dish-types'>
                     <strong>Dish Types: </strong>
-                    {dishTypes.length > 0
-                      ? capitalCaseArray(dishTypes).join(', ')
+                    {dishTypes.length > 0 || dishTypes[0] === ''
+                      ? dishTypes.join(', ')
                       : 'Not Specified'}
                   </div>
                   <div className='cuisine'>
                     <strong>Cuisines: </strong>
-                    {cuisines.length > 0
-                      ? capitalCaseArray(cuisines).join(', ')
-                      : 'Generic'}
+                    {cuisines.length > 0 ? cuisines.join(', ') : 'Generic'}
                   </div>
                   <div className='diets'>
                     <strong>Diets: </strong>
-                    {diets.length > 0
-                      ? capitalCaseArray(diets).join(', ')
-                      : 'None'}
+                    {diets.length > 0 ? diets.join(', ') : 'None'}
                   </div>
                 </div>
               </Col>
@@ -230,18 +160,18 @@ const SpoonRecipe = ({
             <div className='recipe-ingredients'>
               <h4 className='text-primary recipe-header'>Ingredients</h4>
               <ul className='mt-2'>
-                {extendedIngredients.map((ingredient, idx) => (
-                  <li key={idx}>{ingredient.original}</li>
+                {ingredients.map((ingredient, idx) => (
+                  <li key={idx}>{ingredient}</li>
                 ))}
               </ul>
             </div>
 
-            {analyzedInstructions.length === 0 ? null : (
+            {instructions.length === 0 ? null : (
               <div className='recipe-instructions'>
                 <h4 className='text-primary recipe-header'>Instructions</h4>
                 <ol className='mt-2'>
-                  {analyzedInstructions[0].steps.map(step => (
-                    <li key={step.number}>{step.step}</li>
+                  {instructions.map((step, idx) => (
+                    <li key={idx}>{step}</li>
                   ))}
                 </ol>
               </div>

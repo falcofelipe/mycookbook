@@ -1,13 +1,7 @@
 import React, { useContext, useReducer } from 'react';
 import SpoonContext from './spoonContext';
 import spoonReducer from './spoonReducer';
-import {
-  SEARCH_SPOON,
-  GET_SPOON,
-  CLEAR_SPOON,
-  SPOON_ERROR,
-  SET_LOADING,
-} from '../types';
+import { SEARCH_SPOON, CLEAR_SPOON, SPOON_ERROR, SET_LOADING } from '../types';
 import axios from 'axios';
 
 export const useSpoon = () => {

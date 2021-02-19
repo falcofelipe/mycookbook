@@ -135,15 +135,15 @@ textarea {
     ul {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      grid-gap: 15px;
-      padding-inline-start: 5px;
+      column-gap: 15px;
+      padding-inline-start: 20px;
       padding-right: 15px;
       list-style-position: outside;
       font-size: 0.8rem;
     }
   }
   .recipe-instructions {
-    ul {
+    ol {
       padding-inline-start: 20px;
       list-style-position: outside;
       padding-right: 30px;
@@ -160,6 +160,19 @@ textarea {
   overflow: hidden;
   padding: 1.5rem 4rem;
   border-radius: 5px;
+}
+
+/* MY RECIPES */
+.recipe-grid {
+  img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+  }
+}
+
+.recipe-btn {
+  height: 100% !important;
 }
 
 /* RECIPE FORM */
@@ -231,6 +244,10 @@ textarea {
   strong {
     color: $dark;
   }
+}
+
+.font-lg {
+  font-size: 1.2rem !important;
 }
 
 /* MEDIA QUERIES */

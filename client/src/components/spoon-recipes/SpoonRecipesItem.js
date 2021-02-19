@@ -23,7 +23,7 @@ const SpoonRecipesItem = ({ recipe, location }) => {
         <Link
           as={Button}
           to={{
-            pathname: `/search/recipes/${id}`,
+            pathname: `/search/${id}`,
             state: {
               recipe,
               fromLink: location.pathname,

@@ -28,13 +28,13 @@ const recipesReducer = (state, action) => {
     case DELETE_RECIPE:
       return {
         ...state,
-        recipes: state.recipess.filter(recipe => recipe._id !== action.payload),
+        recipes: state.recipes.filter(recipe => recipe._id !== action.payload),
         loading: false,
       };
     case UPDATE_RECIPE:
       return {
         ...state,
-        recipes: state.recipess.map(recipe =>
+        recipes: state.recipes.map(recipe =>
           recipe._id === action.payload._id ? action.payload : recipe
         ),
         loading: false,

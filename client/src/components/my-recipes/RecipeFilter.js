@@ -5,6 +5,8 @@ import {
   clearFilter,
 } from '../../context/my-recipes/RecipesState';
 
+import Form from 'react-bootstrap/Form';
+
 const RecipeFilter = () => {
   const recipesDispatch = useRecipes()[1];
 
@@ -17,9 +19,14 @@ const RecipeFilter = () => {
   };
 
   return (
-    <form>
-      <input type='text' placeholder='Filter Recipes...' onChange={onChange} />
-    </form>
+    <Form action='#!'>
+      <Form.Control
+        type='text'
+        placeholder='Filter Recipes...'
+        onChange={onChange}
+        className='w-100 my-3'
+      />
+    </Form>
   );
 };
 

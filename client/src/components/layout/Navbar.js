@@ -64,10 +64,10 @@ const MainNavbar = ({ icon, title }) => {
         <Navbar.Toggle aria-controls='main-navbar-nav' />
         <Navbar.Collapse id='main-navbar-nav'>
           <Nav className='ml-auto lead'>
-            <Nav.Link as={Link} to='/search' className='text-dark'>
+            <Nav.Link as={Link} to='/' className='text-dark'>
               Search
             </Nav.Link>
-            <Nav.Link as={Link} to='/' className='text-dark'>
+            <Nav.Link as={Link} to='/recipes' className='text-dark'>
               My Recipes
             </Nav.Link>
             <Nav.Link as={Link} to='/about' className='text-dark'>

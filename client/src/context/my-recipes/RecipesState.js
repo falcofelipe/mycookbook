@@ -101,7 +101,7 @@ export const clearFilter = dispatch => {
 
 const RecipesState = props => {
   const initialState = {
-    recipes: null,
+    recipes: [],
     current: null,
     filter: '',
     error: null,

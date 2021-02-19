@@ -1,20 +1,17 @@
-import React, { useState, useContext, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import {
   useSpoon,
   searchSpoon,
   clearSpoon,
 } from '../../context/spoon/SpoonState';
-import AlertContext from '../../context/alert/alertContext';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 
 const Search = () => {
   const [spoonState, spoonDispatch] = useSpoon();
-  const alertContext = useContext(AlertContext);
 
   const { recipes } = spoonState;
 
