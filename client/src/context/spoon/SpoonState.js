@@ -16,8 +16,9 @@ let spoonKey;
 if (process.env.NODE_ENV !== 'production') {
   spoonKey = process.env.REACT_APP_SPOON_KEY;
 } else {
-  axios.get('/spoon/key').then(key => (spoonKey = key));
+  axios.get('/api/spoon/key').then(key => (spoonKey = key));
 }
+
 const addApiKey = parameters => {
   let params = { apiKey: spoonKey, ...parameters };
   return params;
@@ -33,7 +34,6 @@ axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 
 // Search Recipes via Spoonacular API
 export const searchSpoon = async (dispatch, parameters) => {
-  console.log(process.env);
   setLoading(dispatch);
   try {
     const params = addApiKey(parameters);
