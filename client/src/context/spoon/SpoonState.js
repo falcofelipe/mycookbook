@@ -1,4 +1,4 @@
-import React, { useContext, useReducer } from 'react';
+import React, { useContext, useReducer, useEffect } from 'react';
 import SpoonContext from './spoonContext';
 import spoonReducer from './spoonReducer';
 import { SEARCH_SPOON, CLEAR_SPOON, SPOON_ERROR, SET_LOADING } from '../types';
@@ -45,10 +45,6 @@ export const searchSpoon = async (dispatch, parameters) => {
       type: SEARCH_SPOON,
       payload: response.data.results,
     });
-    // dispatch({
-    //   type: SET_REMAINING_QUOTA,
-    //   payload: response.headers
-    // })
   } catch (err) {
     console.error(err);
     dispatch({
@@ -57,20 +53,6 @@ export const searchSpoon = async (dispatch, parameters) => {
     });
   }
 };
-
-// export const getUserAndRepos = async username => {
-//   // This method returns as an array the results of an array of promises once all of them have been resolved.
-//   const [user, repos] = await Promise.all([
-//     github.get(`/users/${username}?`),
-//     github.get(`/users/${username}/repos?per_page=5&sort=created:asc?`),
-//   ]);
-//   return { user: user.data, repos: repos.data };
-// };
-
-// export const getFirstUsers = async () => {
-//   const firstUsers = await github.get('/users');
-//   return firstUsers.data;
-// };
 
 export const clearSpoon = dispatch => dispatch({ type: CLEAR_SPOON });
 
@@ -87,6 +69,12 @@ const SpoonState = props => {
   };
 
   const [state, dispatch] = useReducer(spoonReducer, initialState);
+
+  // Sets the default headers of axios to allow API calls on production
+  useEffect(() => {
+    axios.defaults.headers.post['Access-Control-Allow-Methods'] =
+      'PATCH, DELETE, POST, GET, OPTIONS';
+  }, []);
 
   return (
     <SpoonContext.Provider
