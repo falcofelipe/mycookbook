@@ -1,5 +1,6 @@
 /node_modules/
 /OLD_GIT/
+/.env
 
 /client/node_modules/
 /client/.pnp
