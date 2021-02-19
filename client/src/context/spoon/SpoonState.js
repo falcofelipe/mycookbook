@@ -16,9 +16,8 @@ let spoonKey;
 if (process.env.NODE_ENV !== 'production') {
   spoonKey = process.env.REACT_APP_SPOON_KEY;
 } else {
-  axios.get('/api/spoon/key').then(res => {
-    console.log(res);
-    spoonKey = res.data.apiKey;
+  axios.get('/api/spoon/key').then(key => {
+    spoonKey = key.data;
   });
 }
 
