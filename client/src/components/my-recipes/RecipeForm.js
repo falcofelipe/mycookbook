@@ -22,7 +22,7 @@ const RecipeForm = props => {
   const { current } = recipesState;
 
   const defaultImgUrl =
-    'https://res.cloudinary.com/falco-felipe27/image/upload/v1613529260/hnyonilaojqx1zjisski.jpg';
+    'https://res.cloudinary.com/falco-felipe27/image/upload/v1613706890/chefHat_qxxwbb.png';
 
   // useMemo is used to prevent rerendering initialState on every render
   const initialState = useMemo(
