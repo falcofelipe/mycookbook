@@ -58,7 +58,7 @@ const MainNavbar = ({ icon, title }) => {
       <Container>
         <Navbar.Brand>
           <h2>
-            <a href='/' className='text-black'>
+            <a href='/' className='brand-link'>
               <i className={icon} /> {title}
             </a>
           </h2>

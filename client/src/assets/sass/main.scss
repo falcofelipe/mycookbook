@@ -25,6 +25,11 @@ html {
 #main-navbar {
   h2 {
     font-weight: 500 !important;
+
+    .brand-link {
+      color: black !important;
+      text-decoration: none;
+    }
   }
 
   a {
