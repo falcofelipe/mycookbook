@@ -58,7 +58,9 @@ const MainNavbar = ({ icon, title }) => {
       <Container>
         <Navbar.Brand>
           <h2>
-            <i className={icon} /> {title}
+            <a href='/' className='text-dark'>
+              <i className={icon} /> {title}
+            </a>
           </h2>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls='main-navbar-nav' />
