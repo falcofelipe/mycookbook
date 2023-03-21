@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://falco27:mycookbook543@mycookbook.qlhg5.mongodb.net/mycookbook?retryWrites=true&w=majority",
+  "jwtSecret": "myCookbookSecret333"
+}
